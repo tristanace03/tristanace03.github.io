@@ -3,1090 +3,414 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tristan Cravens | CS Student & Researcher</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
-            --bg-card: #16161f;
-            --accent-cyan: #00d4aa;
-            --accent-blue: #3b82f6;
-            --accent-purple: #8b5cf6;
-            --text-primary: #f0f0f5;
-            --text-secondary: #9090a0;
-            --text-muted: #606070;
-            --border-color: #252530;
-            --gradient-1: linear-gradient(135deg, #00d4aa 0%, #3b82f6 50%, #8b5cf6 100%);
-            --font-display: 'Outfit', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            font-family: var(--font-display);
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* Noise overlay */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-            opacity: 0.03;
-            pointer-events: none;
-            z-index: 1000;
-        }
-
-        /* Gradient orbs */
-        .gradient-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.15;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .orb-1 {
-            width: 600px;
-            height: 600px;
-            background: var(--accent-cyan);
-            top: -200px;
-            right: -200px;
-            animation: float 20s ease-in-out infinite;
-        }
-
-        .orb-2 {
-            width: 400px;
-            height: 400px;
-            background: var(--accent-purple);
-            bottom: 20%;
-            left: -100px;
-            animation: float 15s ease-in-out infinite reverse;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(30px, -30px) rotate(5deg); }
-            66% { transform: translate(-20px, 20px) rotate(-5deg); }
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            padding: 1.5rem 2rem;
-            background: rgba(10, 10, 15, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        nav.scrolled {
-            padding: 1rem 2rem;
-        }
-
-        .nav-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-family: var(--font-mono);
-            font-size: 1.1rem;
-            font-weight: 600;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            font-weight: 500;
-            letter-spacing: 0.02em;
-            transition: color 0.3s ease;
-            position: relative;
-        }
-
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -4px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent-cyan);
-            transition: width 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--text-primary);
-        }
-
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 8rem 2rem 4rem;
-            position: relative;
-        }
-
-        .hero-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        .hero-tag {
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            color: var(--accent-cyan);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            opacity: 0;
-            animation: slideUp 0.6s ease forwards;
-        }
-
-        .hero-tag::before {
-            content: '';
-            width: 40px;
-            height: 1px;
-            background: var(--accent-cyan);
-        }
-
-        .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
-            font-weight: 700;
-            line-height: 1.05;
-            margin-bottom: 1.5rem;
-            opacity: 0;
-            animation: slideUp 0.6s ease 0.1s forwards;
-        }
-
-        .hero h1 span {
-            display: block;
-            background: var(--gradient-1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-description {
-            font-size: 1.25rem;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin-bottom: 2.5rem;
-            opacity: 0;
-            animation: slideUp 0.6s ease 0.2s forwards;
-        }
-
-        .hero-links {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            opacity: 0;
-            animation: slideUp 0.6s ease 0.3s forwards;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.875rem 1.75rem;
-            border-radius: 8px;
-            font-size: 0.95rem;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            border: none;
-        }
-
-        .btn-primary {
-            background: var(--gradient-1);
-            color: var(--bg-primary);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(0, 212, 170, 0.3);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--accent-cyan);
-            background: rgba(0, 212, 170, 0.05);
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Section styling */
-        section {
-            padding: 6rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .section-number {
-            font-family: var(--font-mono);
-            font-size: 0.9rem;
-            color: var(--accent-cyan);
-        }
-
-        .section-title {
-            font-size: 1.75rem;
-            font-weight: 600;
-        }
-
-        .section-line {
-            flex: 1;
-            height: 1px;
-            background: var(--border-color);
-            max-width: 300px;
-        }
-
-        /* Education */
-        .education-grid {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .edu-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .edu-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--gradient-1);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .edu-card:hover {
-            border-color: rgba(0, 212, 170, 0.3);
-            transform: translateX(8px);
-        }
-
-        .edu-card:hover::before {
-            opacity: 1;
-        }
-
-        .edu-degree {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .edu-school {
-            color: var(--accent-cyan);
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-        }
-
-        .edu-location {
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        /* Experience */
-        .experience-timeline {
-            position: relative;
-            padding-left: 2rem;
-        }
-
-        .experience-timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-purple));
-        }
-
-        .exp-item {
-            position: relative;
-            padding-bottom: 3rem;
-        }
-
-        .exp-item:last-child {
-            padding-bottom: 0;
-        }
-
-        .exp-item::before {
-            content: '';
-            position: absolute;
-            left: -2rem;
-            top: 8px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--bg-primary);
-            border: 2px solid var(--accent-cyan);
-            transform: translateX(-5px);
-        }
-
-        .exp-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 0.75rem;
-        }
-
-        .exp-role {
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-
-        .exp-date {
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            color: var(--accent-cyan);
-            background: rgba(0, 212, 170, 0.1);
-            padding: 0.25rem 0.75rem;
-            border-radius: 4px;
-        }
-
-        .exp-company {
-            color: var(--text-secondary);
-            font-weight: 500;
-            margin-bottom: 1rem;
-        }
-
-        .exp-description {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        .exp-description li {
-            margin-bottom: 0.5rem;
-            padding-left: 0.5rem;
-        }
-
-        /* Projects */
-        .project-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2.5rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .project-card:hover {
-            border-color: rgba(0, 212, 170, 0.3);
-            transform: translateY(-4px);
-        }
-
-        .project-badge {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: var(--accent-purple);
-            background: rgba(139, 92, 246, 0.1);
-            padding: 0.25rem 0.75rem;
-            border-radius: 4px;
-            display: inline-block;
-            margin-bottom: 1rem;
-        }
-
-        .project-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .project-description {
-            color: var(--text-secondary);
-            line-height: 1.7;
-        }
-
-        /* Research */
-        .research-grid {
-            display: grid;
-            gap: 1.5rem;
-        }
-
-        .research-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-        }
-
-        .research-card:hover {
-            border-color: rgba(59, 130, 246, 0.3);
-        }
-
-        .research-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            color: var(--text-primary);
-        }
-
-        .research-description {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .research-tag {
-            display: inline-block;
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
-            color: var(--accent-blue);
-            background: rgba(59, 130, 246, 0.1);
-            padding: 0.2rem 0.6rem;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-        }
-
-        /* Publications */
-        .publication-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 2rem;
-            position: relative;
-        }
-
-        .publication-card::before {
-            content: '"';
-            position: absolute;
-            top: 1rem;
-            right: 2rem;
-            font-size: 4rem;
-            font-family: Georgia, serif;
-            color: var(--accent-cyan);
-            opacity: 0.2;
-            line-height: 1;
-        }
-
-        .pub-venue {
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            color: var(--accent-cyan);
-            margin-bottom: 0.75rem;
-        }
-
-        .pub-title {
-            font-size: 1.1rem;
-            font-weight: 500;
-            line-height: 1.5;
-            margin-bottom: 0.75rem;
-        }
-
-        .pub-authors {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .pub-status {
-            display: inline-block;
-            font-size: 0.75rem;
-            color: var(--accent-cyan);
-            background: rgba(0, 212, 170, 0.1);
-            padding: 0.2rem 0.6rem;
-            border-radius: 4px;
-            margin-top: 1rem;
-        }
-
-        /* Leadership */
-        .achievement-list {
-            display: grid;
-            gap: 1rem;
-        }
-
-        .achievement-item {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-            padding: 1.5rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .achievement-item:hover {
-            border-color: rgba(0, 212, 170, 0.3);
-        }
-
-        .achievement-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient-1);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .achievement-icon svg {
-            width: 20px;
-            height: 20px;
-            fill: var(--bg-primary);
-        }
-
-        .achievement-text {
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        .achievement-text strong {
-            color: var(--text-primary);
-        }
-
-        /* Skills */
-        .skills-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-
-        .skill-category {
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.75rem;
-        }
-
-        .skill-category-title {
-            font-family: var(--font-mono);
-            font-size: 0.8rem;
-            color: var(--accent-cyan);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            margin-bottom: 1.25rem;
-        }
-
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .skill-tag {
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
-        }
-
-        .skill-tag:hover {
-            border-color: var(--accent-cyan);
-            color: var(--text-primary);
-        }
-
-        /* Contact */
-        .contact-section {
-            text-align: center;
-            padding: 8rem 2rem;
-        }
-
-        .contact-title {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-        }
-
-        .contact-description {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            max-width: 500px;
-            margin: 0 auto 2.5rem;
-        }
-
-        .contact-links {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 2rem;
-            border-top: 1px solid var(--border-color);
-        }
-
-        .footer-text {
-            font-family: var(--font-mono);
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        /* Mobile menu */
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-        }
-
-        .mobile-menu-btn span {
-            display: block;
-            width: 24px;
-            height: 2px;
-            background: var(--text-primary);
-            margin: 5px 0;
-            transition: all 0.3s ease;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .nav-links {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: var(--bg-secondary);
-                flex-direction: column;
-                padding: 1.5rem;
-                gap: 1rem;
-                border-bottom: 1px solid var(--border-color);
-            }
-
-            .nav-links.active {
-                display: flex;
-            }
-
-            .hero {
-                padding: 7rem 1.5rem 3rem;
-            }
-
-            section {
-                padding: 4rem 1.5rem;
-            }
-
-            .exp-header {
-                flex-direction: column;
-            }
-
-            .section-line {
-                display: none;
-            }
-        }
-
-        /* Scroll animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
+    <title>Tristan Cravens | Applied AI & Embedded ML Engineer</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="gradient-orb orb-1"></div>
-    <div class="gradient-orb orb-2"></div>
+    <!-- Grid Background -->
+    <div class="grid-bg"></div>
 
-    <nav id="navbar">
-        <div class="nav-content">
-            <div class="logo">TC</div>
-            <button class="mobile-menu-btn" onclick="toggleMenu()" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#education">Education</a></li>
-                <li><a href="#experience">Experience</a></li>
-                <li><a href="#projects">Projects</a></li>
-                <li><a href="#research">Research</a></li>
-                <li><a href="#publications">Publications</a></li>
-                <li><a href="#skills">Skills</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
+    <!-- Navigation -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="nav-logo">TC_SYS</div>
+                <ul class="nav-links">
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#research">Research</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#stack">Stack</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
         </div>
-    </nav>
+    </header>
 
+    <!-- Hero Section -->
     <section class="hero">
-        <div class="hero-content">
-            <p class="hero-tag">Computer Science Student & Researcher</p>
-            <h1>
-                Tristan Cravens
-                <span>Building the Future</span>
-            </h1>
-            <p class="hero-description">
-                CS student at Illinois State University passionate about machine learning, 
-                computer vision, and cybersecurity research. Currently exploring applied ML 
-                solutions and low-power encryption for space systems.
-            </p>
-            <div class="hero-links">
-                <a href="mailto:tristanace2@gmail.com" class="btn btn-primary">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                        <polyline points="22,6 12,13 2,6"/>
-                    </svg>
-                    Get in Touch
-                </a>
-                <a href="https://www.linkedin.com/in/tristan-cravens" target="_blank" class="btn btn-secondary">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                    </svg>
-                    LinkedIn
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <section id="education">
-        <div class="section-header fade-in">
-            <span class="section-number">01</span>
-            <h2 class="section-title">Education</h2>
-            <div class="section-line"></div>
-        </div>
-        <div class="education-grid">
-            <div class="edu-card fade-in">
-                <p class="edu-degree">Bachelor's of Science in Computer Science</p>
-                <p class="edu-school">Illinois State University</p>
-                <p class="edu-location">Normal, IL</p>
-            </div>
-            <div class="edu-card fade-in">
-                <p class="edu-degree">Study Abroad Experience</p>
-                <p class="edu-school">University of Stirling</p>
-                <p class="edu-location">Stirling, Scotland</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="experience">
-        <div class="section-header fade-in">
-            <span class="section-number">02</span>
-            <h2 class="section-title">Professional Experience</h2>
-            <div class="section-line"></div>
-        </div>
-        <div class="experience-timeline">
-            <div class="exp-item fade-in">
-                <div class="exp-header">
-                    <h3 class="exp-role">IT Innovation Intern</h3>
-                    <span class="exp-date">May 2025 - Present</span>
-                </div>
-                <p class="exp-company">GROWMARK, Inc. — Bloomington, IL</p>
-                <ul class="exp-description">
-                    <li>Built ML-based corn yield estimation system using YOLOv8-OBB and AWS SageMaker achieving ~94% kernel counting accuracy, optimized for edge inference.</li>
-                    <li>Developed internal technology prototypes supporting agribusiness and operations teams across the cooperative.</li>
-                </ul>
-            </div>
-            <div class="exp-item fade-in">
-                <div class="exp-header">
-                    <h3 class="exp-role">Professor's Assistant / Grader</h3>
-                    <span class="exp-date">Sept 2024 - Present</span>
-                </div>
-                <p class="exp-company">School of Information Technology, Illinois State University — Normal, IL</p>
-                <ul class="exp-description">
-                    <li>Evaluated and graded 40+ assignments weekly focused on C++ programming concepts and problem solving.</li>
-                    <li>Ensured consistency in grading and supported student understanding of core C++ concepts.</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <section id="projects">
-        <div class="section-header fade-in">
-            <span class="section-number">03</span>
-            <h2 class="section-title">Technical Projects</h2>
-            <div class="section-line"></div>
-        </div>
-        <div class="project-card fade-in">
-            <span class="project-badge">Project Manager</span>
-            <h3 class="project-title">Social Media Product Discovery and Tracking System</h3>
-            <p class="project-description">
-                Leading the technical implementation for an interdisciplinary system detecting consumer product trends 
-                for a large, international direct-to-consumer corporation. Coordinating API integration, data pipelines, 
-                and UI/UX design across technical and business teams.
-            </p>
-        </div>
-    </section>
-
-    <section id="research">
-        <div class="section-header fade-in">
-            <span class="section-number">04</span>
-            <h2 class="section-title">Research Experience</h2>
-            <div class="section-line"></div>
-        </div>
-        <p class="fade-in" style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.05rem;">
-            Undergraduate Researcher at Illinois State University School of Information Technology 
-            <span style="color: var(--text-muted);">| August 2025 - Present</span>
-        </p>
-        <div class="research-grid">
-            <div class="research-card fade-in">
-                <span class="research-tag">Embedded Systems</span>
-                <h3 class="research-title">Low Power Encryption Solutions for CubeSats</h3>
-                <p class="research-description">
-                    Benchmarked AES, ChaCha20, and other lightweight cryptographic ciphers on CubeSat-class 
-                    microcontrollers to optimize energy consumption, latency, and memory usage for 
-                    low-Earth-orbit satellite systems.
+        <div class="container">
+            <div class="hero-content">
+                <span class="mission-label">Applied AI Systems Engineering</span>
+                <h1>
+                    Building intelligent systems for<br>
+                    <span class="highlight">agriculture</span>, 
+                    <span class="highlight">security</span>, and 
+                    <span class="highlight">human communication</span>
+                </h1>
+                <p class="hero-description">
+                    Senior Computer Science major deploying production ML systems at GROWMARK, 
+                    researching low-power encryption for CubeSats, and developing real-time ASL 
+                    translation pipelines. First-author IEEE researcher building at the intersection 
+                    of embedded systems, computer vision, and applied cryptography.
                 </p>
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <span class="stat-value">~94%</span>
+                        <span class="stat-label">Production Model Accuracy</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">IEEE</span>
+                        <span class="stat-label">First-Author Publication</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-value">3</span>
+                        <span class="stat-label">Active Research Projects</span>
+                    </div>
+                </div>
             </div>
-            <div class="research-card fade-in">
-                <span class="research-tag">Machine Learning</span>
-                <h3 class="research-title">Applied ML for Real-Time ASL Translation</h3>
-                <p class="research-description">
-                    Developing real-time translation pipeline from ASL gloss/video to English. 
-                    Investigating dataset limitations and evaluating various translation architectures.
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">01</span>
+                <h2 class="section-title">Field Deployments</h2>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="projects-grid">
+                <!-- Project 1: GROWMARK ML System -->
+                <div class="project-dossier">
+                    <div class="project-header">
+                        <div class="project-meta">
+                            <span class="project-id">PROJ-001 / GROWMARK</span>
+                            <h3 class="project-title">ML-Based Corn Yield Estimation System</h3>
+                        </div>
+                        <span class="project-status status-production">Production</span>
+                    </div>
+                    <div class="project-body">
+                        <p class="project-description">
+                            Engineered production-grade computer vision pipeline for agricultural yield prediction 
+                            using YOLOv8-OBB object detection and AWS SageMaker infrastructure. System processes 
+                            field imagery to count corn kernels with 94% accuracy, optimized for edge inference 
+                            on embedded hardware. Deployed across GROWMARK cooperative operations supporting 
+                            agribusiness decision-making and harvest planning.
+                        </p>
+                        <div class="project-specs">
+                            <div class="spec-item">
+                                <span class="spec-label">Accuracy:</span>
+                                <span class="spec-value">~94% kernel detection</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Platform:</span>
+                                <span class="spec-value">AWS SageMaker + Edge</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Model:</span>
+                                <span class="spec-value">YOLOv8-OBB (Ultralytics)</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Deployment:</span>
+                                <span class="spec-value">Edge-optimized inference</span>
+                            </div>
+                        </div>
+                        <div class="project-tags">
+                            <span class="tag">Computer Vision</span>
+                            <span class="tag">PyTorch</span>
+                            <span class="tag">AWS</span>
+                            <span class="tag">Edge ML</span>
+                            <span class="tag">Agriculture</span>
+                            <span class="tag">Production</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 2: Social Media Product Discovery -->
+                <div class="project-dossier">
+                    <div class="project-header">
+                        <div class="project-meta">
+                            <span class="project-id">PROJ-002 / ENTERPRISE</span>
+                            <h3 class="project-title">Social Media Product Discovery & Tracking System</h3>
+                        </div>
+                        <span class="project-status status-development">Development</span>
+                    </div>
+                    <div class="project-body">
+                        <p class="project-description">
+                            Leading technical implementation for interdisciplinary trend detection system serving 
+                            large international D2C corporation. Architecting API integration layer, data pipeline 
+                            infrastructure, and UI/UX framework. Coordinating cross-functional team spanning technical 
+                            implementation, business intelligence, and product strategy.
+                        </p>
+                        <div class="project-specs">
+                            <div class="spec-item">
+                                <span class="spec-label">Role:</span>
+                                <span class="spec-value">Project Manager / Tech Lead</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Scale:</span>
+                                <span class="spec-value">Enterprise / International</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Systems:</span>
+                                <span class="spec-value">API Integration + Data Pipelines</span>
+                            </div>
+                        </div>
+                        <div class="project-tags">
+                            <span class="tag">System Architecture</span>
+                            <span class="tag">APIs</span>
+                            <span class="tag">Data Pipelines</span>
+                            <span class="tag">Project Management</span>
+                            <span class="tag">Enterprise</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Research Section -->
+    <section id="research" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">02</span>
+                <h2 class="section-title">Research Operations</h2>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="research-grid">
+                <!-- Research 1: CubeSat Cryptography -->
+                <div class="research-entry">
+                    <div class="research-header">
+                        <div>
+                            <h3 class="research-title">Low-Power Encryption Solutions for CubeSats</h3>
+                            <span class="research-institution">Illinois State University SIT</span>
+                        </div>
+                        <span class="research-period">Aug 2025 - Present</span>
+                    </div>
+                    <p class="research-description">
+                        Benchmarking lightweight cryptographic ciphers (AES, ChaCha20, and alternatives) on 
+                        CubeSat-class microcontrollers to optimize energy consumption, latency, and memory usage 
+                        for low-Earth-orbit satellite systems. Investigating power-constrained security trade-offs 
+                        in space-based embedded systems with real-world hardware validation.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">Cryptography</span>
+                        <span class="tag">Embedded Systems</span>
+                        <span class="tag">CubeSat</span>
+                        <span class="tag">Low-Power Computing</span>
+                        <span class="tag">Hardware Security</span>
+                    </div>
+                </div>
+
+                <!-- Research 2: ASL Translation -->
+                <div class="research-entry">
+                    <div class="research-header">
+                        <div>
+                            <h3 class="research-title">Applied ML for Real-Time ASL Translation</h3>
+                            <span class="research-institution">Illinois State University SIT</span>
+                        </div>
+                        <span class="research-period">Aug 2025 - Present</span>
+                    </div>
+                    <p class="research-description">
+                        Developing real-time translation pipeline from American Sign Language gloss and video to 
+                        English text. Investigating dataset quality limitations, evaluating neural translation 
+                        architectures, and optimizing for low-latency inference. Focus on production-viable 
+                        accessibility technology bridging communication barriers.
+                    </p>
+                    <div class="publication">
+                        📄 <strong>Cravens, T., Rashad, S.</strong> Advances in Automatic Sign Language Translation: 
+                        A Survey of Techniques and Systems. <em>IEEE CCWC 2026</em> - Accepted, forthcoming
+                    </div>
+                    <div class="project-tags">
+                        <span class="tag">Machine Learning</span>
+                        <span class="tag">Computer Vision</span>
+                        <span class="tag">NLP</span>
+                        <span class="tag">Accessibility</span>
+                        <span class="tag">Real-Time Systems</span>
+                    </div>
+                </div>
+
+                <!-- Research 3: INSuRE+E -->
+                <div class="research-entry">
+                    <div class="research-header">
+                        <div>
+                            <h3 class="research-title">INSuRE+E Applied Cybersecurity Research Program</h3>
+                            <span class="research-institution">U.S. Gov / National Labs Sponsored</span>
+                        </div>
+                        <span class="research-period">Aug 2025 - Present</span>
+                    </div>
+                    <p class="research-description">
+                        Selected participant in nationally competitive applied cybersecurity research program 
+                        sponsored by U.S. government agencies and national laboratories. Conducting classified-adjacent 
+                        research in security-critical systems, threat modeling, and defensive architectures.
+                    </p>
+                    <div class="project-tags">
+                        <span class="tag">Cybersecurity</span>
+                        <span class="tag">National Security</span>
+                        <span class="tag">Applied Research</span>
+                        <span class="tag">Government</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">03</span>
+                <h2 class="section-title">Field Experience</h2>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="experience-grid">
+                <div class="experience-card">
+                    <div class="experience-icon">🌾</div>
+                    <div class="experience-content">
+                        <h3>IT Innovation Intern</h3>
+                        <p class="experience-meta">GROWMARK, Inc. | Bloomington, IL | May 2025 - Present</p>
+                        <p class="experience-description">
+                            Developing ML-based agricultural systems and technology prototypes supporting 
+                            cooperative operations across agribusiness divisions. Building production-grade 
+                            computer vision pipelines, edge inference systems, and data infrastructure.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="experience-card">
+                    <div class="experience-icon">🎓</div>
+                    <div class="experience-content">
+                        <h3>Professor's Assistant / Grader</h3>
+                        <p class="experience-meta">Illinois State University SIT | Normal, IL | Sep 2024 - Present</p>
+                        <p class="experience-description">
+                            Evaluating 40+ weekly assignments focused on C++ programming concepts, data structures, 
+                            and problem-solving. Ensuring grading consistency and supporting student comprehension 
+                            of core computer science fundamentals.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="experience-card">
+                    <div class="experience-icon">🚀</div>
+                    <div class="experience-content">
+                        <h3>Gateway to Ag Careers (GTAC) Program</h3>
+                        <p class="experience-meta">AgGateway | 2025 Cohort | 1 of 6 Selected</p>
+                        <p class="experience-description">
+                            Competitive national program connecting emerging technologists with agricultural 
+                            industry leaders. Focus on agtech innovation, industry networking, and career 
+                            development in precision agriculture and data-driven farming systems.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section id="stack" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">04</span>
+                <h2 class="section-title">Technical Systems</h2>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="tech-stack">
+                <div class="tech-categories">
+                    <div class="tech-category">
+                        <h3>Core Languages</h3>
+                        <div class="tech-items">
+                            <div class="tech-item">Python</div>
+                            <div class="tech-item">C / C++</div>
+                            <div class="tech-item">Java</div>
+                            <div class="tech-item">SQL</div>
+                        </div>
+                    </div>
+
+                    <div class="tech-category">
+                        <h3>ML / Computer Vision</h3>
+                        <div class="tech-items">
+                            <div class="tech-item">PyTorch</div>
+                            <div class="tech-item">YOLOv8 (Ultralytics)</div>
+                            <div class="tech-item">OpenCV</div>
+                            <div class="tech-item">ONNX</div>
+                            <div class="tech-item">NumPy / Pandas</div>
+                            <div class="tech-item">Matplotlib</div>
+                        </div>
+                    </div>
+
+                    <div class="tech-category">
+                        <h3>Infrastructure & DevOps</h3>
+                        <div class="tech-items">
+                            <div class="tech-item">AWS SageMaker</div>
+                            <div class="tech-item">Linux Systems</div>
+                            <div class="tech-item">Git / Version Control</div>
+                            <div class="tech-item">Docker / Containers</div>
+                        </div>
+                    </div>
+
+                    <div class="tech-category">
+                        <h3>Embedded & Hardware</h3>
+                        <div class="tech-items">
+                            <div class="tech-item">Arduino</div>
+                            <div class="tech-item">Microcontroller Programming</div>
+                            <div class="tech-item">Edge ML Optimization</div>
+                            <div class="tech-item">Low-Power Systems</div>
+                        </div>
+                    </div>
+
+                    <div class="tech-category">
+                        <h3>Development Tools</h3>
+                        <div class="tech-items">
+                            <div class="tech-item">Jupyter Notebooks</div>
+                            <div class="tech-item">SQLite</div>
+                            <div class="tech-item">VS Code / IDEs</div>
+                            <div class="tech-item">Terminal / CLI Tools</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-number">05</span>
+                <h2 class="section-title">Establish Contact</h2>
+                <div class="section-divider"></div>
+            </div>
+
+            <div class="tech-stack" style="text-align: center; padding: var(--spacing-xl);">
+                <h3 style="font-size: 1.5rem; margin-bottom: var(--spacing-md); color: var(--text-primary);">
+                    Open for collaboration on applied AI, embedded systems, and research initiatives
+                </h3>
+                <p style="color: var(--text-secondary); margin-bottom: var(--spacing-lg); font-size: 1.1rem;">
+                    Interested in agricultural technology, satellite systems, accessibility tools, or cybersecurity research
                 </p>
-            </div>
-            <div class="research-card fade-in">
-                <span class="research-tag">Cybersecurity</span>
-                <h3 class="research-title">INSuRE + E Research Program</h3>
-                <p class="research-description">
-                    Selected participant in a nationally competitive applied cybersecurity research program 
-                    sponsored by U.S. government and national laboratories.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section id="publications">
-        <div class="section-header fade-in">
-            <span class="section-number">05</span>
-            <h2 class="section-title">Publications</h2>
-            <div class="section-line"></div>
-        </div>
-        <div class="publication-card fade-in">
-            <p class="pub-venue">IEEE CCWC 2026</p>
-            <h3 class="pub-title">Advances in Automatic Sign Language Translation: A Survey of Techniques and Systems</h3>
-            <p class="pub-authors">Cravens, T., Rashad, S.</p>
-            <span class="pub-status">Accepted — Publication Forthcoming</span>
-        </div>
-    </section>
-
-    <section id="leadership">
-        <div class="section-header fade-in">
-            <span class="section-number">06</span>
-            <h2 class="section-title">Leadership & Achievements</h2>
-            <div class="section-line"></div>
-        </div>
-        <div class="achievement-list">
-            <div class="achievement-item fade-in">
-                <div class="achievement-icon">
-                    <svg viewBox="0 0 24 24"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
-                </div>
-                <p class="achievement-text">
-                    <strong>One of six applicants</strong> selected for the 2025 Gateway to Ag Careers program (AgGateway).
-                </p>
-            </div>
-            <div class="achievement-item fade-in">
-                <div class="achievement-icon">
-                    <svg viewBox="0 0 24 24"><path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2M18 20H6V4H13V9H18V20Z"/></svg>
-                </div>
-                <p class="achievement-text">
-                    Featured in articles about <strong>GROWMARK, Hackathon, Product Discovery, and GTAC</strong>.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section id="skills">
-        <div class="section-header fade-in">
-            <span class="section-number">07</span>
-            <h2 class="section-title">Technical Skills</h2>
-            <div class="section-line"></div>
-        </div>
-        <div class="skills-container">
-            <div class="skill-category fade-in">
-                <h3 class="skill-category-title">Languages</h3>
-                <div class="skill-tags">
-                    <span class="skill-tag">Python</span>
-                    <span class="skill-tag">C/C++</span>
-                    <span class="skill-tag">Java</span>
-                    <span class="skill-tag">SQL</span>
-                </div>
-            </div>
-            <div class="skill-category fade-in">
-                <h3 class="skill-category-title">Machine Learning & CV</h3>
-                <div class="skill-tags">
-                    <span class="skill-tag">PyTorch</span>
-                    <span class="skill-tag">YOLOv8</span>
-                    <span class="skill-tag">OpenCV</span>
-                    <span class="skill-tag">ONNX</span>
-                    <span class="skill-tag">NumPy</span>
-                    <span class="skill-tag">Pandas</span>
-                    <span class="skill-tag">Matplotlib</span>
-                </div>
-            </div>
-            <div class="skill-category fade-in">
-                <h3 class="skill-category-title">Tools & Systems</h3>
-                <div class="skill-tags">
-                    <span class="skill-tag">AWS SageMaker</span>
-                    <span class="skill-tag">Linux</span>
-                    <span class="skill-tag">Git</span>
-                    <span class="skill-tag">Jupyter</span>
-                    <span class="skill-tag">SQLite</span>
-                    <span class="skill-tag">Arduino</span>
+                <div style="display: flex; gap: var(--spacing-md); justify-content: center; flex-wrap: wrap;">
+                    <a href="mailto:tristanace2@gmail.com" style="display: inline-block; padding: 1rem 2rem; background: rgba(74, 158, 255, 0.1); border: 1px solid var(--border-color); color: var(--accent-primary); text-decoration: none; font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.05em; transition: all 0.3s ease;">
+                        Email
+                    </a>
+                    <a href="https://linkedin.com/in/tristan-cravens" style="display: inline-block; padding: 1rem 2rem; background: rgba(74, 158, 255, 0.1); border: 1px solid var(--border-color); color: var(--accent-primary); text-decoration: none; font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.05em; transition: all 0.3s ease;">
+                        LinkedIn
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="contact" class="contact-section">
-        <h2 class="contact-title fade-in">Let's Connect</h2>
-        <p class="contact-description fade-in">
-            I'm always interested in discussing research opportunities, collaboration, 
-            or just having a chat about technology.
-        </p>
-        <div class="contact-links fade-in">
-            <a href="mailto:tristanace2@gmail.com" class="btn btn-primary">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                    <polyline points="22,6 12,13 2,6"/>
-                </svg>
-                tristanace2@gmail.com
-            </a>
-            <a href="tel:+12175528356" class="btn btn-secondary">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-                </svg>
-                (217) 552-8356
-            </a>
-            <a href="https://www.linkedin.com/in/tristan-cravens" target="_blank" class="btn btn-secondary">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                </svg>
-                LinkedIn
-            </a>
-        </div>
-    </section>
-
+    <!-- Footer -->
     <footer>
-        <p class="footer-text">Designed & Built by Tristan Cravens © 2026</p>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="mailto:tristanace2@gmail.com">Email</a>
+                    <a href="https://linkedin.com/in/tristan-cravens">LinkedIn</a>
+                    <a href="tel:+12175528356">+1 (217) 552-8356</a>
+                </div>
+                <p class="footer-copyright">
+                    © 2026 Tristan Cravens | Applied AI Systems Engineering
+                </p>
+            </div>
+        </div>
     </footer>
 
-    <script>
-        // Mobile menu toggle
-        function toggleMenu() {
-            document.getElementById('navLinks').classList.toggle('active');
-        }
-
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
-        });
-
-        // Fade in on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.fade-in').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Close mobile menu when clicking a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navLinks').classList.remove('active');
-            });
-        });
-    </script>
+    <script src="js/script.js"></script>
 </body>
 </html>
