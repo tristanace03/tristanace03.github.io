@@ -171,8 +171,25 @@ nav {
     padding: var(--spacing-xl) 0;
 }
 
+.hero .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--spacing-lg);
+}
+
 .hero-content {
-    max-width: 900px;
+    flex: 1;
+    max-width: 60%;
+}
+
+.hero-image img {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .mission-label {
@@ -400,6 +417,20 @@ nav {
     color: var(--text-secondary);
     line-height: 1.8;
     margin-bottom: var(--spacing-md);
+}
+
+.project-images {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.project-images img {
+    max-width: 200px;
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
 }
 
 .project-specs {
